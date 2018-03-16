@@ -2,6 +2,7 @@ $(document).ready(function(){
 
     var id = 1; // image id
     var zip = new JSZip(); // zip package
+    var zipCheck = true; // zip package download
 
     // load canvas
     function loadimage(id,i) {
@@ -37,14 +38,20 @@ $(document).ready(function(){
             // png file name
             var name = $("#C"+i).text();
 
-            // Single download
-            //saveAs(canvas.toDataURL(), name);
-
             // zip download
-            package(canvas.toDataURL(), name,i);
-
-            // console debug
-            //console.log("canvas "+i+"/"+id);
+            if(zipCheck){
+                package(canvas.toDataURL(), name, i);
+            }
+            // Single download
+            else{
+                saveAs(canvas.toDataURL(), name);
+                // debug message
+                console.log("Comment " + i + " downloading");
+                if(i != (id-1)){
+                    i++;
+                    idi(i);
+                }
+            }
 
         },1000);
     }
@@ -149,7 +156,7 @@ $(document).ready(function(){
                 for(var i = 0; i < data.items.length; i++){
                     result = `
 
-                        <div class="comment" id="${id}">    
+                        <div class="comment" style="border-radius: 10px" id="${id}">    
                             <img src="${data.items[i].snippet.topLevelComment.snippet.authorProfileImageUrl}" class="img">
                             <div class="comment-text">
                                 <div class="comment-header">
@@ -185,12 +192,23 @@ $(document).ready(function(){
 
         event.preventDefault();
 
+        zipCheck = $("#zipCheck").is(":checked");
+        // debug message
+        console.log("Download as zip: " + zipCheck);
+
         var i = 1;
 
         idi(i);
 
 
     })
+
+    $("#commentSize").on('input propertychange', () => {
+        var value = $("#fillet").val();
+        $(".comment").css("border-radius",value+"px");
+        console.log(value);
+
+    });
 
 
 })
