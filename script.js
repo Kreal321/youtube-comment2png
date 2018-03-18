@@ -22,7 +22,7 @@ $(document).ready(function(){
         var rect = id.getBoundingClientRect(); // get object position relative to the viewport
 
         canvas.getContext("2d").scale(scale, scale);
-        canvas.getContext("2d").translate(-rect.left, -rect.top);
+        canvas.getContext("2d").translate(-rect.left-8, -rect.top);
 
         var opts = {
             canvas: canvas,
@@ -33,7 +33,7 @@ $(document).ready(function(){
         // get png
         html2canvas(id, opts).then(function(canvas) {
             // append image to body (debug)
-            //document.body.appendChild(canvas);
+            // document.body.appendChild(canvas);
 
             // png file name
             var name = $("#C"+i).text();
