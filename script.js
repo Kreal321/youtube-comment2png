@@ -3,6 +3,7 @@ $(document).ready(function(){
     var id = 1; // image id
     var zip = new JSZip(); // zip package
     var zipCheck = true; // zip package download
+    var downloadNum = 0; // downloaded comment number
 
     // load canvas
     function loadimage(id,i) {
@@ -49,7 +50,7 @@ $(document).ready(function(){
                 console.log("Comment " + i + " downloading");
                 if(i != (id-1)){
                     i++;
-                    idi(i);
+                    next(i);
                 }
             }
 
@@ -84,24 +85,28 @@ $(document).ready(function(){
         zip.file(filename+".png", url.split(';base64,')[1], {base64: true});
         // debug message
         console.log("Comment " + i + " start packaging");
-
-        // zip download
-        if(i == (id-1)){
-            zip.generateAsync({type:"blob"}).then(function(content) {
-                saveAs(content, "example.zip");
-            });
-            // debug message
-            console.log((id -1) + " comments packaged");
-            console.log("zip downloaded");
-        }
-
-
-        if(i != (id-1)){
+        // rendering next comment
+        if(i < (id - 1)){
             i++;
-            idi(i);
+            next(i);
+        }
+        // zip download
+        else{
+            zipDownload();
         }
 
     }
+
+    // zip download
+    function zipDownload(){
+        zip.generateAsync({type:"blob"}).then(function(content) {
+            saveAs(content, "example.zip");
+        });
+        // debug message
+        console.log(downloadNum + " comments packaged");
+        console.log("zip downloaded");
+    }
+
 
     // progress bar
     function process(i){
@@ -111,9 +116,21 @@ $(document).ready(function(){
         $("#loadProcess").html(width);
     }
 
-    // canvas process
-    function idi(i){
-        loadimage(document.getElementById(i),i);
+    // next canvas rendering
+    function next(i){
+        // check if comment exsit
+        if(document.getElementById(i)){
+            loadimage(document.getElementById(i),i);
+            downloadNum++;
+        }
+        else{
+            if(i < (id-1)){
+                i++;
+                next(i);
+            }else if(zipCheck){
+                zipDownload();
+            }
+        }
         // debug message
         console.log("Comment "+ i +" start rendering");
         // process bar
@@ -156,7 +173,8 @@ $(document).ready(function(){
                 for(var i = 0; i < data.items.length; i++){
                     result = `
 
-                        <div class="comment" style="border-radius: 10px" id="${id}">    
+                        <div class="comment position-relative" style="border-radius: 10px" id="${id}">
+                            <a class="delete" onclick="removeComment(${id})" data-html2canvas-ignore ><img src="close.png" class="delete-img" /></a>     
                             <img src="${data.items[i].snippet.topLevelComment.snippet.authorProfileImageUrl}" class="img">
                             <div class="comment-text">
                                 <div class="comment-header">
@@ -186,8 +204,15 @@ $(document).ready(function(){
 
     })
 
+    // Step2: comment style
+    $("#commentSize").on('input propertychange', () => {
+        var value = $("#fillet").val();
+        $(".comment").css("border-radius",value+"px");
+        console.log(value);
 
-    // Step 2: package and download
+    });
+
+    // Step 3: package and download
     $("#download").submit(function(event){
 
         event.preventDefault();
@@ -198,17 +223,13 @@ $(document).ready(function(){
 
         var i = 1;
 
-        idi(i);
-
+        next(i);
 
     })
 
-    $("#commentSize").on('input propertychange', () => {
-        var value = $("#fillet").val();
-        $(".comment").css("border-radius",value+"px");
-        console.log(value);
 
-    });
+
+
 
 
 })

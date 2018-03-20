@@ -33,6 +33,11 @@
 
     <link rel="stylesheet" href="style.css">
     <script src="maintest.js"></script>
+    <script>
+        function removeComment(comment){
+            document.getElementById(comment).remove();
+        }
+    </script>
 </head>
 
 <body>
@@ -40,6 +45,7 @@
     <br>
     <h1 class="">Youtube Comment</h1>
     <br>
+    <!-- Step 1: load comment -->
     <form id="load">
         <div class="form-group">
             <input class="form-control" type="text" id="videoId" placeholder="videoId"></input>
@@ -52,12 +58,14 @@
             <button class="btn btn-danger" type="submit" id="loadSubmit">Dispaly comment</button>
         </div>
     </form>
+    <!-- Step 2: comment style -->
     <form id="commentSize">
         <div class="form-group">
             <label>Fillet Size</label>
             <input type="range" class="form-control-range" min="0" max="50" id="fillet" value="10">
         </div>
     </form>
+    <!-- Step 3: comment download -->
     <form id="download">
         <div class="form-group form-check">
             <input type="checkbox" class="form-check-input" id="zipCheck" checked>
