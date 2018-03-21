@@ -4,6 +4,10 @@ $(document).ready(function(){
     var zip = new JSZip(); // zip package
     var zipCheck = true; // zip package download
     var downloadNum = 0; // downloaded comment number
+    var pageToken =""; // next page key
+    var videoId ="";
+    var key = "AIzaSyBg4vDgPr6uFZqwg2L6BvVovASTQGm7Nh4"; // youtube api key
+
 
     // load canvas
     function loadimage(id,i) {
@@ -138,67 +142,162 @@ $(document).ready(function(){
 
     }
 
+    // time change
+    function timeChange(cTime){
+        // change date format
+        var cDate = cTime.substring(0,19);
+        cDate = cDate.replace(/-/g, "/");
+        cDate = cDate.replace("T", " ");
+        // get time difference
+        var startDate = new Date(cDate);
+        var endDate = new Date();
+        var dateDiff = endDate.getTime() - startDate.getTime();
+        if(dateDiff >= 63072e6){
+            return Math.floor(dateDiff / 31536e6) + " years ago"; // x years ago
+            console.log(time + " years ago");
+        }
+        else if(dateDiff >= 31536e6){
+            return Math.floor(dateDiff / 31536e6) + " year ago";  // 1 year ago
+            console.log(time + " years ago");
+        }
+        else if(dateDiff >= 5184e6){
+            return Math.floor(dateDiff / 2592e6) + " months ago"; // x months ago
+            console.log(time + " months ago");
+        }
+        else if(dateDiff >= 2592e6){
+            return Math.floor(dateDiff / 2592e6) + " month ago"; // 1 month ago
+            console.log(time + " months ago");
+        }
+        else if(dateDiff >= 12096e5){
+            return Math.floor(dateDiff / 6048e5) + " weeks ago";  // x weeks ago
+            console.log(time + " weeks ago");
+        }
+        else if(dateDiff >= 6048e5){
+            return Math.floor(dateDiff / 6048e5) + " week ago";  // 1 week ago
+            console.log(time + " weeks ago");
+        }
+        else if(dateDiff >= 1782e5){
+            return Math.floor(dateDiff / 864e5) + " days ago"; // x days ago
+            console.log(time + " days ago");
+        }
+        else if(dateDiff >= 864e5){
+            return Math.floor(dateDiff / 864e5) + " day ago"; // 1 day ago
+            console.log(time + " days ago");
+        }
+        else if(dateDiff >= 72e5){
+            return Math.floor(dateDiff / 36e5) + " hours ago"; // x hours ago
+            console.log(time + " hours ago");
+        }
+        else if(dateDiff >= 36e5){
+            return Math.floor(dateDiff / 36e5) + " hour ago"; // 1 hour ago
+            console.log(time + " hours ago");
+        }
+        else if(dateDiff >= 12e4){
+            return Math.floor(dateDiff / 6e4) + " minutes ago"; // x minutes ago
+            console.log(time + " minutes ago");
+        }
+        else if(dateDiff >= 6e4){
+            return Math.floor(dateDiff / 6e4) + " minute ago"; // 1 minute ago
+            console.log(time + " minutes ago");
+        }
+        else if(dateDiff >= 2e3){
+            return Math.floor(dateDiff / 1e3) + " seconds ago"; // x seconds ago
+            console.log(time + " seconds ago");
+        }
+        else if(dateDiff >= 1e3){
+            return Math.floor(dateDiff / 1e3) + " second ago"; // 1 second ago
+            console.log(time + " seconds ago");
+        }
+
+    }
+
+    // append comments
+    function appendComment(data,commentNum,order){
+        var result = "";
+        var i = 0; // number of data
+
+        // debug message
+        console.log(data);
+
+
+
+        // append comments
+        for(i = 0; i < data.items.length; i++){
+            var dataTime = timeChange(data.items[i].snippet.topLevelComment.snippet.publishedAt);
+            result = `
+
+                <div class="comment position-relative" style="border-radius: 10px" id="${id}">
+                    <a class="delete" onclick="removeComment(${id})" data-html2canvas-ignore ><img src="close.png" class="delete-img" /></a>     
+                    <img src="${data.items[i].snippet.topLevelComment.snippet.authorProfileImageUrl}" class="img">
+                    <div class="comment-text">
+                        <div class="comment-header">
+                            <span class="user">${data.items[i].snippet.topLevelComment.snippet.authorDisplayName}</span>
+                            <span class="time">${dataTime}</span>
+                        </div>
+                        <div class="comment-detail" id="C${id}">${data.items[i].snippet.topLevelComment.snippet.textDisplay}</div>
+                    </div>
+                </div>    
+
+            `;
+
+            $("#result").append(result);
+            id++;
+        }
+        // renew pageToken
+        pageToken = data.nextPageToken;
+        // debug message
+        //console.log("pageToken: " + pageToken);
+        console.log(i + " comments loaded.");
+
+        if(i == data.items.length){
+            // number of comments left
+            commentNum = commentNum - 100;
+            // load left comments
+            if(commentNum > 0 && pageToken != null){
+                loadComment(commentNum,order);
+            }
+        }
+    }
+
+
+    // load comments connect to google api
+    function loadComment(commentNum,order){
+
+        // get number of comments to take, max 100
+        var number = 0;
+        if(commentNum > 100){
+            number = 100;
+        }else{
+            number = commentNum;
+        }
+        // connect to Youtube API
+        if(pageToken.length == 0){
+            var url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=" + videoId + "&maxResults=" + number + "&order=" + order + "&key=" + key;
+        }else{
+            var url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=" + videoId + "&maxResults=" + number + "&order=" + order + "&pageToken=" + pageToken + "&key=" + key;
+
+        }
+        // connect to google api
+        $.get(url,function(data){
+            // append comment
+            appendComment(data,commentNum,order)
+        });
+
+    }
+
+
     // Step 1: load comments
     $("#load").submit(function(event){
 
         event.preventDefault();
 
-        var videoId = $("#videoId").val();
+        videoId = $("#videoId").val();
         var commentNum = $("#commentNum").val();
         var order = $("#order").val();
-        var result = "";
-        var key = "AIzaSyBg4vDgPr6uFZqwg2L6BvVovASTQGm7Nh4"; // youtube api key
-        var pageToken =""; // next page key
 
+        // load comment
+        loadComment(commentNum,order);
 
-        while(commentNum > 0){
-            // get number of comments to take, max 100
-            var number = 0;
-            if(commentNum > 100){
-                number = 100;
-            }else{
-                number = commentNum;
-            }
-            // connect to Youtube API
-            if(pageToken.length == 0){
-                var url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=" + videoId + "&maxResults=" + number + "&order=" + order + "&key=" + key;
-            }else{
-                var url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=" + videoId + "&maxResults=" + number + "&order=" + order + "&pageToken=" + pageToken + "&key=" + key;
-
-            }
-            $.get(url,function(data){
-                // debug
-                console.log(data);
-                // load comments
-                for(var i = 0; i < data.items.length; i++){
-                    result = `
-
-                        <div class="comment position-relative" style="border-radius: 10px" id="${id}">
-                            <a class="delete" onclick="removeComment(${id})" data-html2canvas-ignore ><img src="close.png" class="delete-img" /></a>     
-                            <img src="${data.items[i].snippet.topLevelComment.snippet.authorProfileImageUrl}" class="img">
-                            <div class="comment-text">
-                                <div class="comment-header">
-                                    <span class="user">${data.items[i].snippet.topLevelComment.snippet.authorDisplayName}</span>
-                                    <span class="time">${data.items[i].snippet.topLevelComment.snippet.publishedAt}</span>
-                                </div>
-                                <div class="comment-detail" id="C${id}">${data.items[i].snippet.topLevelComment.snippet.textDisplay}</div>
-                            </div>
-                        </div>    
-
-                    `;
-
-                    $("#result").append(result);
-                    id++;
-                }
-                pageToken = data.nextPageToken;
-                // debug message
-                console.log(number + " comments loaded.");
-                //console.log("pageToken: " + pageToken);
-
-            })
-            // number of comments left
-            commentNum = commentNum - 100;
-        }
         // hide button
         $("#loadSubmit").hide();
 
@@ -208,7 +307,7 @@ $(document).ready(function(){
     $("#commentSize").on('input propertychange', () => {
         var value = $("#fillet").val();
         $(".comment").css("border-radius",value+"px");
-        console.log(value);
+        $("#borderRadius").text("Border Radius: "+value+"px");
 
     });
 

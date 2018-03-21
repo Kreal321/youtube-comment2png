@@ -32,7 +32,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
-    <script src="maintest.js"></script>
+    <script src="v2.2.js"></script>
     <script>
         function removeComment(comment){
             document.getElementById(comment).remove();
@@ -48,9 +48,11 @@
     <!-- Step 1: load comment -->
     <form id="load">
         <div class="form-group">
+            <label>Video Id</label>
             <input class="form-control" type="text" id="videoId" placeholder="videoId"></input>
+            <label>Numbers of comments</label>
             <input class="form-control" type="number" id="commentNum" placeholder="numbers of comments"></input>
-            <label>order</label>
+            <label>Order</label>
             <select class="form-control" id="order">
                 <option>time</option>
                 <option>relevance</option>
@@ -61,7 +63,7 @@
     <!-- Step 2: comment style -->
     <form id="commentSize">
         <div class="form-group">
-            <label>Fillet Size</label>
+            <label id="borderRadius">Border Radius: 10px</label>
             <input type="range" class="form-control-range" min="0" max="50" id="fillet" value="10">
         </div>
     </form>
