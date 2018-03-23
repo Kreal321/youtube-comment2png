@@ -32,7 +32,7 @@
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap" rel="stylesheet">
 
     <link rel="stylesheet" href="style.css">
-    <script src="v2.2.js"></script>
+    <script src="maintest.js"></script>
     <script>
         function removeComment(comment){
             document.getElementById(comment).remove();
@@ -49,31 +49,37 @@
     <form id="load">
         <div class="form-group">
             <label>Video Id</label>
-            <input class="form-control" type="text" id="videoId" placeholder="videoId"></input>
+            <input class="form-control is-invalid" type="text" id="videoId" placeholder="videoId"></input>
+            <div class="invalid-feedback" id="videoIdFeedback">
+                The length of video id should be 11.
+            </div>
             <label>Numbers of comments</label>
-            <input class="form-control" type="number" id="commentNum" placeholder="numbers of comments"></input>
+            <input class="form-control is-invalid" type="number" id="commentNum" placeholder="numbers of comments"></input>
+            <div class="invalid-feedback" id="commentNumFeedback">
+                The number should be positive.
+            </div>
             <label>Order</label>
             <select class="form-control" id="order">
                 <option>time</option>
                 <option>relevance</option>
             </select>
-            <button class="btn btn-danger" type="submit" id="loadSubmit">Dispaly comment</button>
+            <button class="btn btn-danger" type="submit" id="loadSubmit" disabled>Load Comment</button>
         </div>
     </form>
     <!-- Step 2: comment style -->
     <form id="commentSize">
         <div class="form-group">
             <label id="borderRadius">Border Radius: 10px</label>
-            <input type="range" class="form-control-range" min="0" max="50" id="fillet" value="10">
+            <input type="range" class="form-control-range" min="0" max="50" id="radiusValue" value="10" disabled>
         </div>
     </form>
     <!-- Step 3: comment download -->
     <form id="download">
         <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="zipCheck" checked>
+            <input type="checkbox" class="form-check-input" id="zipCheck" checked disabled>
             <label class="form-check-label">download as zip</label>
         </div>
-        <button type="submit" class="btn btn-danger">download</button>
+        <button type="submit" class="btn btn-danger" id="downloadBtn" disabled>download</button>
     </form>
     <div class="progress" style="height: 20px">
         <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="loadProcess"

@@ -286,7 +286,54 @@ $(document).ready(function(){
     }
 
 
-    // Step 1: load comments
+    // Step 1: check & load comments
+    $("#load").on('input propertychange', () => {
+        var videoIdTemp = $("#videoId").val();
+        var commentNumTemp = $("#commentNum").val();
+        var idCheck = false;
+        var numCheck = false;
+
+        if(videoIdTemp.length != 11){
+            $("#videoId").removeClass("is-valid");
+            $("#videoId").addClass("is-invalid");
+            $("#videoIdFeedback").removeClass("valid-feedback");
+            $("#videoIdFeedback").addClass("invalid-feedback");
+            $("#videoIdFeedback").text("The length of video id should be 11. You entered "+ videoIdTemp.length);
+            idCheck = false;
+        }else{
+            $("#videoId").removeClass("is-invalid");
+            $("#videoId").addClass("is-valid");
+            $("#videoIdFeedback").removeClass("invalid-feedback");
+            $("#videoIdFeedback").addClass("valid-feedback");
+            $("#videoIdFeedback").text("video id is valid.");
+            idCheck = true;
+        }
+        if(commentNumTemp <= 0){
+            $("#commentNum").removeClass("is-valid");
+            $("#commentNum").addClass("is-invalid");
+            $("#commentNumFeedback").removeClass("valid-feedback");
+            $("#commentNumFeedback").addClass("invalid-feedback");
+            $("#commentNumFeedback").text("The number should be positive.");
+            numCheck = false;
+        }else{
+            $("#commentNum").removeClass("is-invalid");
+            $("#commentNum").addClass("is-valid");
+            $("#commentNumFeedback").removeClass("invalid-feedback");
+            $("#commentNumFeedback").addClass("valid-feedback");
+            $("#commentNumFeedback").text("The number is valid.");
+            numCheck = true;
+        }
+
+        if(idCheck&&numCheck){
+            $("#loadSubmit").removeAttr("disabled");
+        }else{
+            $("#loadSubmit").attr("disabled",true);
+        }
+        console.log(videoIdTemp);
+        console.log(commentNumTemp);
+
+    })
+
     $("#load").submit(function(event){
 
         event.preventDefault();
@@ -299,13 +346,16 @@ $(document).ready(function(){
         loadComment(commentNum,order);
 
         // hide button
-        $("#loadSubmit").hide();
+        $("#loadSubmit").attr("disabled",true);
+        $("#radiusValue").removeAttr("disabled");
+        $("#zipCheck").removeAttr("disabled");
+        $("#downloadBtn").removeAttr("disabled");
 
     })
 
     // Step2: comment style
     $("#commentSize").on('input propertychange', () => {
-        var value = $("#fillet").val();
+        var value = $("#radiusValue").val();
         $(".comment").css("border-radius",value+"px");
         $("#borderRadius").text("Border Radius: "+value+"px");
 
@@ -325,9 +375,6 @@ $(document).ready(function(){
         next(i);
 
     })
-
-
-
 
 
 
