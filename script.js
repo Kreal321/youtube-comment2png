@@ -6,6 +6,7 @@ $(document).ready(function(){
     var downloadNum = 0; // downloaded comment number
     var pageToken =""; // next page key
     var videoId ="";
+    var order ="" // comment order
     var key = "AIzaSyBg4vDgPr6uFZqwg2L6BvVovASTQGm7Nh4"; // youtube api key
 
 
@@ -212,7 +213,7 @@ $(document).ready(function(){
     }
 
     // append comments
-    function appendComment(data,commentNum,order){
+    function appendComment(data,commentNum){
         var result = "";
         var i = 0; // number of data
 
@@ -254,14 +255,20 @@ $(document).ready(function(){
             commentNum = commentNum - 100;
             // load left comments
             if(commentNum > 0 && pageToken != null){
-                loadComment(commentNum,order);
+                loadComment(commentNum);
+            }else if(commentNum <= 0){
+                alert("load finished");
+                $("#loadMoreComment").attr("disabled",false);
+            }else if(pageToken == null){
+                alert("load all the comments");
+                $("#loadMoreComment").attr("disabled",true);
             }
         }
     }
 
 
     // load comments connect to google api
-    function loadComment(commentNum,order){
+    function loadComment(commentNum){
 
         // get number of comments to take, max 100
         var number = 0;
@@ -278,9 +285,12 @@ $(document).ready(function(){
 
         }
         // connect to google api
+
         $.get(url,function(data){
             // append comment
-            appendComment(data,commentNum,order)
+            appendComment(data,commentNum);
+        }).fail(function(){
+            alert("There is something wrong");
         });
 
     }
@@ -346,22 +356,41 @@ $(document).ready(function(){
 
         videoId = $("#videoId").val();
         var commentNum = $("#commentNum").val();
-        var order = $("#order").val();
+        order = $("#order").val();
         var apiKey = $("#apiKey").val();
 
+        // api key input
         if(apiKey){
             key = apiKey;
-            console.log(key);
+            // debug message
+            //console.log(key);
         }
 
         // load comment
-        loadComment(commentNum,order);
+        loadComment(commentNum);
 
-        // hide button
+        // button change
+        $("#videoId").attr("disabled",true);
+        $("#commentNum").attr("disabled",true);
+        $("#order").attr("disabled",true);
+        $("#apiCheck").attr("disabled",true);
+        $("#apiKey").attr("disabled",true);
         $("#loadSubmit").attr("disabled",true);
         $("#radiusValue").removeAttr("disabled");
         $("#zipCheck").removeAttr("disabled");
         $("#downloadBtn").removeAttr("disabled");
+
+    })
+
+    $("#loadMoreComment").click(function(){
+        var commentNum = 20;
+
+        if(pageToken != null){
+            loadComment(commentNum);
+        }else if(pageToken == null){
+            alert("load all the comments");
+            $("#loadMoreComment").attr("disabled",true);
+        }
 
     })
 
