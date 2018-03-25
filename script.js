@@ -290,6 +290,7 @@ $(document).ready(function(){
     $("#load").on('input propertychange', () => {
         var videoIdTemp = $("#videoId").val();
         var commentNumTemp = $("#commentNum").val();
+        var apiCheck = $("#apiCheck").is(":checked");
         var idCheck = false;
         var numCheck = false;
 
@@ -323,6 +324,11 @@ $(document).ready(function(){
             $("#commentNumFeedback").text("The number is valid.");
             numCheck = true;
         }
+        if(apiCheck){
+            $("#api").show();
+        }else{
+            $("#api").hide();
+        }
 
         if(idCheck&&numCheck){
             $("#loadSubmit").removeAttr("disabled");
@@ -341,6 +347,12 @@ $(document).ready(function(){
         videoId = $("#videoId").val();
         var commentNum = $("#commentNum").val();
         var order = $("#order").val();
+        var apiKey = $("#apiKey").val();
+
+        if(apiKey){
+            key = apiKey;
+            console.log(key);
+        }
 
         // load comment
         loadComment(commentNum,order);

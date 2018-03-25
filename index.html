@@ -63,6 +63,14 @@
                 <option>time</option>
                 <option>relevance</option>
             </select>
+            <div class="custom-control custom-switch">
+                <input type="checkbox" class="custom-control-input" id="apiCheck">
+                <label class="custom-control-label" for="apiCheck">Use your own Youtube Api Key</label>
+            </div>
+            <div id="api" style="display: none">
+                <label>Your api key</label>
+                <input class="form-control" type="text" id="apiKey" placeholder="Api key"></input>
+            </div>
             <button class="btn btn-danger" type="submit" id="loadSubmit" disabled>Load Comment</button>
         </div>
     </form>
