@@ -34,7 +34,7 @@
     <link rel="stylesheet" href="style.css">
     <script src="maintest.js"></script>
     <script>
-        function removeComment(comment){
+        function removeComment(comment) {
             document.getElementById(comment).remove();
         }
     </script>
@@ -43,57 +43,107 @@
 <body>
 <div class="container">
     <br>
-    <h1 class="">Youtube Comment</h1>
+
     <br>
-    <!-- Step 1: load comment -->
-    <form id="load">
-        <div class="form-group">
-            <label>Video Id</label>
-            <input class="form-control is-invalid" type="text" id="videoId" placeholder="videoId"></input>
-            <div class="invalid-feedback" id="videoIdFeedback">
-                The length of video id should be 11.
+
+    <div class="step-form">
+
+        <h3 class="header-title"><b>DOWNLOAD</b> Youtube Comment<br><small>As png to make awesome videos</small>
+        </h3>
+
+        <ul class="nav nav-pills mb-3 step-bar" id="pills-tab" role="tablist">
+            <li class="nav-item" style="width: 33.33%">
+                <a class="nav-step active" id="step1Control" data-toggle="pill" href="#step1">Load</a>
+            </li>
+            <li class="nav-item" style="width: 33.33%">
+                <a class="nav-step" id="step2Control" data-toggle="pill" href="#step2">Choose</a>
+            </li>
+            <li class="nav-item" style="width: 33.33%">
+                <a class="nav-step" id="step3Control" data-toggle="pill" href="#step3">Download</a>
+            </li>
+        </ul>
+
+
+        <div class="tab-content" id="pills-tabContent">
+            <!-- Step 1: load comment -->
+            <div class="tab-pane fade show active" id="step1">
+                <div class="container ">
+
+                    <form id="load">
+                        <div class="form-group">
+                            <label>Video Id</label>
+                            <input class="form-control" type="text" id="videoId" placeholder="videoId"></input>
+                            <div class="invalid-feedback" id="videoIdFeedback">
+                                The length of video id should be 11.
+                            </div>
+                            <label>Numbers of comments</label>
+                            <input class="form-control" type="number" id="commentNum"
+                                   placeholder="numbers of comments"></input>
+                            <div class="invalid-feedback" id="commentNumFeedback">
+                                The number should be positive.
+                            </div>
+                            <label>Order</label>
+                            <select class="form-control" id="order">
+                                <option>time</option>
+                                <option>relevance</option>
+                            </select>
+                            <div class="custom-control custom-switch">
+                                <input type="checkbox" class="custom-control-input" id="apiCheck">
+                                <label class="custom-control-label" for="apiCheck">Use your own Youtube Api
+                                    Key</label>
+                            </div>
+                            <div id="api" style="display: none">
+                                <label>Your api key</label>
+                                <input class="form-control" type="text" id="apiKey" placeholder="Api key"></input>
+                            </div>
+                            <button class="btn btn-danger" type="submit" id="loadSubmit" disabled>Load
+                                Comment</button>
+                        </div>
+                    </form>
+
+                </div>
+
             </div>
-            <label>Numbers of comments</label>
-            <input class="form-control is-invalid" type="number" id="commentNum" placeholder="numbers of comments"></input>
-            <div class="invalid-feedback" id="commentNumFeedback">
-                The number should be positive.
+
+            <!-- Step 2: Choose comment  -->
+            <div class="tab-pane fade" id="step2">
+
+                <div class="container">
+                    <button class="btn btn-danger" id="loadMoreComment" disabled>Load more</button>
+
+                    <form id="commentSize">
+                        <div class="form-group">
+                            <label id="borderRadius">Border Radius: 10px</label>
+                            <input type="range" class="form-control-range" min="0" max="50" id="radiusValue"
+                                   value="10" disabled>
+                        </div>
+                    </form>
+
+                </div>
+
             </div>
-            <label>Order</label>
-            <select class="form-control" id="order">
-                <option>time</option>
-                <option>relevance</option>
-            </select>
-            <div class="custom-control custom-switch">
-                <input type="checkbox" class="custom-control-input" id="apiCheck">
-                <label class="custom-control-label" for="apiCheck">Use your own Youtube Api Key</label>
+
+            <!-- Step 3: comment download -->
+            <div class="tab-pane fade" id="step3">
+                <div class="container">
+                    <form id="download">
+                        <div class="form-group form-check">
+                            <input type="checkbox" class="form-check-input" id="zipCheck" checked disabled>
+                            <label class="form-check-label">download as zip</label>
+                        </div>
+                        <button type="submit" class="btn btn-danger" id="downloadBtn" disabled>download</button>
+                    </form>
+                    <div class="progress" style="height: 20px">
+                        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                             id="loadProcess" role="progressbar" style="width: 0%">0%</div>
+                    </div>
+                </div>
+
             </div>
-            <div id="api" style="display: none">
-                <label>Your api key</label>
-                <input class="form-control" type="text" id="apiKey" placeholder="Api key"></input>
-            </div>
-            <button class="btn btn-danger" type="submit" id="loadSubmit" disabled>Load Comment</button>
         </div>
-    </form>
-    <button class="btn btn-danger" id="loadMoreComment" disabled>Load more</button>
-    <!-- Step 2: comment style -->
-    <form id="commentSize">
-        <div class="form-group">
-            <label id="borderRadius">Border Radius: 10px</label>
-            <input type="range" class="form-control-range" min="0" max="50" id="radiusValue" value="10" disabled>
-        </div>
-    </form>
-    <!-- Step 3: comment download -->
-    <form id="download">
-        <div class="form-group form-check">
-            <input type="checkbox" class="form-check-input" id="zipCheck" checked disabled>
-            <label class="form-check-label">download as zip</label>
-        </div>
-        <button type="submit" class="btn btn-danger" id="downloadBtn" disabled>download</button>
-    </form>
-    <div class="progress" style="height: 20px">
-        <div class="progress-bar progress-bar-striped progress-bar-animated bg-success" id="loadProcess"
-             role="progressbar" style="width: 0%">0%</div>
     </div>
+
+
     <div class="comment-block" id="result">
 
         <!-- Load Comment -->

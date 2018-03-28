@@ -5,12 +5,12 @@ $(document).ready(function(){
     var zipCheck = true; // zip package download
     var downloadNum = 0; // downloaded comment number
     var pageToken =""; // next page key
-    var videoId ="";
+    var videoId =""; // videoId
     var order ="" // comment order
     var key = "AIzaSyBg4vDgPr6uFZqwg2L6BvVovASTQGm7Nh4"; // youtube api key
 
 
-    // load canvas
+    // load comment canvas
     function loadimage(id,i) {
         var width = id.offsetWidth; //dom width
         var height = id.offsetHeight; //dom height
