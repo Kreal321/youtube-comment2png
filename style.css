@@ -67,8 +67,140 @@ body{
 
 .delete-img{
     position: absolute;
-    right: 8px;
-    top: 8px;
+    right: 12px;
+    top: 12px;
     width: 12px;
     height: 12px;
+}
+
+.step-form{
+    min-height: 410px;
+    background-color: #FFFFFF;
+    box-shadow: 0 0 15px rgba(0, 0, 0, 0.15), 0 0 1px 1px rgba(0, 0, 0, 0.1);
+    border-radius: 10px;
+    padding: 10px 0;
+}
+
+.header-title{
+    font-weight: 200;
+    text-align: center;
+    font-size: 28px;
+    margin: 20px 0 10px;
+    line-height: 1.1;
+    font-family: inherit
+}
+
+.header-title small{
+    font-size: 60%;
+    color: #999999;
+    font-weight: 300;
+    line-height: 1;
+}
+
+.step-bar{
+    text-align: center;
+    background-color: #999999;
+    color: #FFFFFF;
+}
+
+a.nav-step{
+    color: #FFFFFF;
+    border-radius: .25rem;
+    display: block;
+    padding: .5rem 1rem;
+    text-decoration: none;
+}
+
+a.nav-step.active{
+    background-color: #dc3545;
+
+}
+
+.step-container{
+    padding-top: 100px;
+    z-index: 3;
+}
+
+.image-container {
+    min-height: 100vh;
+    background-position: center center;
+    background-size: cover;
+}
+
+.logo-container{
+    left: 50px;
+    position: absolute;
+    top: 20px;
+    z-index: 3;
+}
+
+.logo-container .logo {
+    overflow: hidden;
+    border-radius: 50%;
+    border: 1px solid #333333;
+    width: 60px;
+    float: left;
+}
+
+.logo-container .brand {
+    font-size: 18px;
+    color: #FFFFFF;
+    line-height: 20px;
+    float: left;
+    margin-left: 10px;
+    margin-top: 10px;
+    width: 60px;
+}
+
+.container .row{
+    justify-content: center!important;
+}
+
+.videoInfo{
+    display: flex;
+    flex-wrap: wrap;
+    font-family: Roboto,Arial,sans-serif;
+}
+
+.row img{
+    width: 240px;
+    height: 135px;
+    margin: .4rem;
+}
+
+.video-detail{
+    width: 90%;
+
+    box-sizing: border-box;
+}
+
+.video-detail h3{
+    color: #030303;
+    display: block;
+    font-size: 1em;
+    font-weight: bold;
+    margin-bottom: .2rem;
+    /* cursor: pointer; */
+
+}
+
+.video-info-detail .channel {
+    max-width: 100%;
+    display: block;
+    font-size: .9rem;
+
+}
+
+.video-info-detail .views{
+    font-size: .8rem;
+}
+
+.container .row .w-50{
+    min-width: 292px;
+    box-sizing: border-box;
+}
+
+.container label{
+    margin-top: 8px;
+    margin-bottom: 4px;
 }

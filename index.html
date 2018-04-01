@@ -5,7 +5,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta name="author" content="Kezhen Xu">
-    <title>GET Youtube Comment</title>
+    <title>Download Youtube Comment as PNG</title>
 
     <!-- bookstrap 4.5 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
@@ -67,7 +67,8 @@
 
                         <ul class="nav nav-pills mb-3 step-bar" id="pills-tab" role="tablist">
                             <li class="nav-item" style="width: 33.33%">
-                                <a class="nav-step active" id="step1Control" data-toggle="pill" href="#step1">Load</a>
+                                <a class="nav-step active" id="step1Control" data-toggle="pill"
+                                   href="#step1">Load</a>
                             </li>
                             <li class="nav-item" style="width: 33.33%">
                                 <a class="nav-step" id="step2Control" data-toggle="pill" href="#step2">Choose</a>
@@ -78,44 +79,81 @@
                         </ul>
 
 
-                        <div class="tab-content" id="pills-tabContent">
+                        <div class="tab-content">
+
                             <!-- Step 1: load comment -->
                             <div class="tab-pane fade show active" id="step1">
+
                                 <div class="container ">
 
                                     <form id="load">
-                                        <div class="form-group">
-                                            <label>Video Id</label>
-                                            <input class="form-control" type="text" id="videoId"
-                                                   placeholder="videoId"></input>
-                                            <div class="invalid-feedback" id="videoIdFeedback">
-                                                The length of video id should be 11.
+                                        <div class="container form-group">
+                                            <div class="row">
+                                                <div class="container w-50 float-left">
+                                                    <label>Video Id</label>
+                                                    <input class="form-control" type="text" id="videoId"
+                                                           placeholder="videoId"></input>
+                                                    <div class="invalid-feedback" id="videoIdFeedback">
+                                                        The length of video id should be 11.
+                                                    </div>
+
+                                                    <label id="commentNumLabel">Load 100 comments</label>
+                                                    <!-- <input class="form-control" type="number" id="commentNum"
+                                                        placeholder="numbers of comments"></input> -->
+                                                    <input type="range" class="custom-range" min="0" max="100" id="commentNum" value="10">
+
+                                                    <label>Sort by</label>
+                                                    <select class="form-control" id="order">
+                                                        <option>time</option>
+                                                        <option>relevance</option>
+                                                    </select>
+
+                                                    <div class="custom-switch row">
+                                                        <input type="checkbox" class="custom-control-input" id="apiCheck" checked>
+                                                        <label class="custom-control-label" for="apiCheck">Use Public Youtube Api Key</label>
+                                                    </div>
+
+                                                    <div id="api" style="display: none">
+                                                        <input class="form-control" type="text" id="apiKey" placeholder="Your Api key"></input>
+                                                    </div>
+
+                                                </div>
+                                                <div class="container w-50 float-right">
+                                                    <label>Video Info</label>
+                                                    <div class="row videoInfo" id="videoInfo">
+
+                                                        <div>
+                                                            <img src="https://i.ytimg.com/vi/zHUpx90NerM/mqdefault.jpg">
+                                                        </div>
+                                                        <div class="video-detail">
+                                                            <div class="video-info">
+                                                                <h3>CSS3 Animation & Transitions Crash Course CSS3 Animation & Transitions Crash Course</h3>
+                                                                <div class="video-info-detail">
+                                                                    <div class="channel">
+                                                                        <span>Traversy Media</span>
+                                                                    </div>
+                                                                    <div class="views">
+                                                                        <span>311k comments • 101k views • 2 years ago</span>
+                                                                    </div>
+                                                                </div>
+                                                            </div>
+                                                        </div>
+
+                                                    </div>
+
+                                                    <div class="d-flex justify-content-end pt-4">
+                                                        <button class="btn btn-danger" type="submit" id="loadSubmit" disabled>Load Comment</button>
+                                                    </div>
+
+                                                </div>
+
                                             </div>
-                                            <label>Numbers of comments</label>
-                                            <input class="form-control" type="number" id="commentNum"
-                                                   placeholder="numbers of comments"></input>
-                                            <div class="invalid-feedback" id="commentNumFeedback">
-                                                The number should be positive.
-                                            </div>
-                                            <label>Order</label>
-                                            <select class="form-control" id="order">
-                                                <option>time</option>
-                                                <option>relevance</option>
-                                            </select>
-                                            <div class="custom-control custom-switch">
-                                                <input type="checkbox" class="custom-control-input" id="apiCheck">
-                                                <label class="custom-control-label" for="apiCheck">Use your own Youtube
-                                                    Api
-                                                    Key</label>
-                                            </div>
-                                            <div id="api" style="display: none">
-                                                <label>Your api key</label>
-                                                <input class="form-control" type="text" id="apiKey"
-                                                       placeholder="Api key"></input>
-                                            </div>
-                                            <button class="btn btn-danger" type="submit" id="loadSubmit" disabled>Load
-                                                Comment</button>
+
+
+
                                         </div>
+
+
                                     </form>
 
                                 </div>
