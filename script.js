@@ -6,14 +6,15 @@ $(document).ready(function(){
     var downloadNum = 0; // downloaded comment number
     var pageToken =""; // next page key
     var videoId =""; // videoId
+    var videoTitle =""; // video title
     var order ="" // comment order
     var key = "AIzaSyBg4vDgPr6uFZqwg2L6BvVovASTQGm7Nh4"; // youtube api key
 
 
     // load comment canvas
-    function loadimage(id,i) {
-        var width = id.offsetWidth; //dom width
-        var height = id.offsetHeight; //dom height
+    function loadimage(element,i) {
+        var width = element.offsetWidth; //dom width
+        var height = element.offsetHeight; //dom height
 
         // fix blurred picture
         var scale = window.devicePixelRatio * 2; // 2x device pixel
@@ -25,7 +26,7 @@ $(document).ready(function(){
 
         // fix picture offset
         //设置context位置，值为相对于视窗的偏移量负值，让图片复位(解决偏移的重点)
-        var rect = id.getBoundingClientRect(); // get object position relative to the viewport
+        var rect = element.getBoundingClientRect(); // get object position relative to the viewport
 
         canvas.getContext("2d").scale(scale, scale);
         canvas.getContext("2d").translate(-rect.left-8, -rect.top);
@@ -37,7 +38,7 @@ $(document).ready(function(){
         };
 
         // get png
-        html2canvas(id, opts).then(function(canvas) {
+        html2canvas(element, opts).then(function(canvas) {
             // append image to body (debug)
             // document.body.appendChild(canvas);
 
@@ -52,10 +53,19 @@ $(document).ready(function(){
             else{
                 saveAs(canvas.toDataURL(), name);
                 // debug message
-                console.log("Comment " + i + " downloading");
-                if(i != (id-1)){
+                //console.log("Comment " + i + " downloading");
+
+                // package message
+                $("#packageMessage").append("Comment " + i + " downloading...<br>");
+                document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
+
+                if(i < (id-1)){
                     i++;
                     next(i);
+                }else{
+                    // package message
+                    $("#packageMessage").append("Comment download complete.<br>");
+                    document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
                 }
             }
 
@@ -88,8 +98,14 @@ $(document).ready(function(){
     function package(url,filename,i){
         // package png file
         zip.file(filename+".png", url.split(';base64,')[1], {base64: true});
+
         // debug message
-        console.log("Comment " + i + " start packaging");
+        //console.log("Comment " + i + " start packaging");
+
+        // pacakage message
+        $("#packageMessage").append("Comment " + i + " packaging...<br>");
+        document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
+
         // rendering next comment
         if(i < (id - 1)){
             i++;
@@ -105,11 +121,16 @@ $(document).ready(function(){
     // zip download
     function zipDownload(){
         zip.generateAsync({type:"blob"}).then(function(content) {
-            saveAs(content, "example.zip");
+            saveAs(content, videoTitle +" Comments.zip");
         });
         // debug message
-        console.log(downloadNum + " comments packaged");
-        console.log("zip downloaded");
+        //console.log(downloadNum + " comments packaged");
+        //console.log("zip downloading");
+
+        // package message
+        $("#packageMessage").append(downloadNum + " comments packaged<br>");
+        $("#packageMessage").append("zip downloading...<br>");
+        document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
     }
 
 
@@ -137,7 +158,12 @@ $(document).ready(function(){
             }
         }
         // debug message
-        console.log("Comment "+ i +" start rendering");
+        // console.log("Comment "+ i +" start rendering");
+
+        // package message
+        $("#packageMessage").append("Comment "+ i +" rendering...<br>");
+        document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
+
         // process bar
         process(i);
 
@@ -256,12 +282,11 @@ $(document).ready(function(){
             // load left comments
             if(commentNum > 0 && pageToken != null){
                 loadComment(commentNum);
-            }else if(commentNum <= 0){
-                alert("load finished");
-                $("#loadMoreComment").attr("disabled",false);
+            }else if(commentNum <= 0 && pageToken != null){
+                $("#loadMessage").text((id-1) +" comments have been loaded.");
             }else if(pageToken == null){
-                alert("load all the comments");
-                $("#loadMoreComment").attr("disabled",true);
+                $("#loadMessage").html((id-1) +" comments have been loaded.<br>All top-level comments loaded.<br>Reply is temporarily not supported");
+                $(".loadMoreComment").attr("disabled",true);
             }
         }
     }
@@ -295,14 +320,84 @@ $(document).ready(function(){
 
     }
 
+    function videoInfo(video){
+        var url = "https://www.googleapis.com/youtube/v3/videos?part=snippet&part=statistics&id=" + video + "&key=" + key;
+        $.get(url,function(data){
+            // debug message
+            console.log(data);
+            if(data.items.length != 0){
+                var title = data.items[0].snippet.title;
+                videoTitle = title;
+                if(title.length > 41){
+                    title = title.substring(0,39) + "...";
+                }
+                var publishedTime = data.items[0].snippet.publishedAt;
+                publishedTime = timeChange(publishedTime);
+                var channel = data.items[0].snippet.channelTitle;
+                var commentCount = data.items[0].statistics.commentCount;
+                if(commentCount > 1e6){
+                    commentCount = Math.floor(commentCount/1e5)/10 + "m";
+                }else if(commentCount > 1e3){
+                    commentCount = Math.floor(commentCount/1e2)/10 + "k";
+                }
+                var viewCount = data.items[0].statistics.viewCount;
+                if(viewCount > 1e6){
+                    viewCount = Math.floor(viewCount/1e5)/10 + "m";
+                }else if(viewCount > 1e3){
+                    viewCount = Math.floor(viewCount/1e2)/10 + "k";
+                }
+
+                console.log(title);
+                console.log(publishedTime);
+                console.log(channel);
+                console.log(commentCount);
+                console.log(viewCount);
+
+
+                var info = `
+                <label>Video Info</label>
+                <div class="row videoInfo">
+                        <img src="https://i.ytimg.com/vi/${video}/mqdefault.jpg">
+                    <div class="video-detail">
+                        <div class="video-info">
+                            <h3>${title}</h3>
+                            <div class="video-info-detail">
+                                <div class="channel">
+                                    <span>${channel}</span>
+                                </div>
+                                <div class="views">
+                                    <span>${commentCount} comments • ${viewCount} views • ${publishedTime}</span>
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                `;
+                $("#videoInfo").html(info);
+
+                $("#videoId").removeClass("is-invalid");
+                $("#videoId").addClass("is-valid");
+                $("#videoIdFeedback").removeClass("invalid-feedback");
+                $("#videoIdFeedback").addClass("valid-feedback");
+                $("#videoIdFeedback").text("video id is valid.");
+                $("#loadSubmit").attr("disabled",false);
+            }
+            else{
+                $("#videoIdFeedback").text("The video id you entered does not exist.");
+                $("#loadSubmit").attr("disabled",true);
+
+            }
+        })
+
+    }
 
     // Step 1: check & load comments
     $("#load").on('input propertychange', () => {
         var videoIdTemp = $("#videoId").val();
-        var commentNumTemp = $("#commentNum").val();
         var apiCheck = $("#apiCheck").is(":checked");
-        var idCheck = false;
-        var numCheck = false;
+        var commentNum = $("#commentNum").val();
+
 
         if(videoIdTemp.length != 11){
             $("#videoId").removeClass("is-valid");
@@ -310,43 +405,22 @@ $(document).ready(function(){
             $("#videoIdFeedback").removeClass("valid-feedback");
             $("#videoIdFeedback").addClass("invalid-feedback");
             $("#videoIdFeedback").text("The length of video id should be 11. You entered "+ videoIdTemp.length);
-            idCheck = false;
+            $("#loadSubmit").attr("disabled",true);
         }else{
-            $("#videoId").removeClass("is-invalid");
-            $("#videoId").addClass("is-valid");
-            $("#videoIdFeedback").removeClass("invalid-feedback");
-            $("#videoIdFeedback").addClass("valid-feedback");
-            $("#videoIdFeedback").text("video id is valid.");
-            idCheck = true;
+            videoInfo(videoIdTemp);
         }
-        if(commentNumTemp <= 0){
-            $("#commentNum").removeClass("is-valid");
-            $("#commentNum").addClass("is-invalid");
-            $("#commentNumFeedback").removeClass("valid-feedback");
-            $("#commentNumFeedback").addClass("invalid-feedback");
-            $("#commentNumFeedback").text("The number should be positive.");
-            numCheck = false;
-        }else{
-            $("#commentNum").removeClass("is-invalid");
-            $("#commentNum").addClass("is-valid");
-            $("#commentNumFeedback").removeClass("invalid-feedback");
-            $("#commentNumFeedback").addClass("valid-feedback");
-            $("#commentNumFeedback").text("The number is valid.");
-            numCheck = true;
-        }
-        if(apiCheck){
+
+        $("#commentNumLabel").text("Load " + commentNum*10 + " comments");
+
+        if(!apiCheck){
             $("#api").show();
         }else{
             $("#api").hide();
         }
 
-        if(idCheck&&numCheck){
-            $("#loadSubmit").removeAttr("disabled");
-        }else{
-            $("#loadSubmit").attr("disabled",true);
-        }
+
+
         console.log(videoIdTemp);
-        console.log(commentNumTemp);
 
     })
 
@@ -355,7 +429,7 @@ $(document).ready(function(){
         event.preventDefault();
 
         videoId = $("#videoId").val();
-        var commentNum = $("#commentNum").val();
+        var commentNum = $("#commentNum").val()*10;
         order = $("#order").val();
         var apiKey = $("#apiKey").val();
 
@@ -369,51 +443,79 @@ $(document).ready(function(){
         // load comment
         loadComment(commentNum);
 
-        // button change
-        $("#videoId").attr("disabled",true);
-        $("#commentNum").attr("disabled",true);
-        $("#order").attr("disabled",true);
-        $("#apiCheck").attr("disabled",true);
-        $("#apiKey").attr("disabled",true);
-        $("#loadSubmit").attr("disabled",true);
-        $("#radiusValue").removeAttr("disabled");
-        $("#zipCheck").removeAttr("disabled");
-        $("#downloadBtn").removeAttr("disabled");
-
-    })
-
-    $("#loadMoreComment").click(function(){
-        var commentNum = 20;
-
-        if(pageToken != null){
-            loadComment(commentNum);
-        }else if(pageToken == null){
-            alert("load all the comments");
-            $("#loadMoreComment").attr("disabled",true);
-        }
+        $("#step1").removeClass("show active");
+        $("#step2").addClass("show active");
+        $("#step1Control").removeClass("active");
+        $("#step2Control").addClass("active");
 
     })
 
     // Step2: comment style
+    $("#loadMoreComment10").click(function(){
+        var commentNum = 10;
+        loadComment(commentNum);
+
+
+    })
+    $("#loadMoreComment20").click(function(){
+        var commentNum = 20;
+        loadComment(commentNum);
+
+    })
+    $("#loadMoreComment50").click(function(){
+        var commentNum = 50;
+        loadComment(commentNum);
+
+    })
+
     $("#commentSize").on('input propertychange', () => {
         var value = $("#radiusValue").val();
         $(".comment").css("border-radius",value+"px");
         $("#borderRadius").text("Border Radius: "+value+"px");
 
     });
+    $("#step2next").click(function(){
+        $("#step2").removeClass("show active");
+        $("#step3").addClass("show active");
+        $("#step2Control").removeClass("active");
+        $("#step3Control").addClass("active");
+    })
 
     // Step 3: package and download
-    $("#download").submit(function(event){
+    $("#previous").click(function(){
+        $("#step3").removeClass("show active");
+        $("#step2").addClass("show active");
+        $("#step3Control").removeClass("active");
+        $("#step2Control").addClass("active");
+    })
+
+    $("#zipCheck").on('input propertychange', () => {
+        zipCheck = $("#zipCheck").is(":checked");
+        if(zipCheck){
+            // package message
+            $("#packageMessage").append("Comments will be packaged for downloading.<br>");
+            document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
+        }else{
+            // package message
+            $("#packageMessage").append("Comments will be downloaded one by one.<br>");
+            document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
+        }
+
+    })
+
+    $("#downloadBtn").click(function(event){
 
         event.preventDefault();
 
-        zipCheck = $("#zipCheck").is(":checked");
+
         // debug message
         console.log("Download as zip: " + zipCheck);
 
         var i = 1;
 
         next(i);
+
+
 
     })
 
