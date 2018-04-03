@@ -66,6 +66,15 @@ $(document).ready(function(){
                     // package message
                     $("#packageMessage").append("Comment download complete.<br>");
                     document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
+                    swal({
+                        title: "Comments downloaded!",
+                        text: "How is your experience?",
+                        icon: "success",
+                        buttons: {
+                            cancel: "Not Good",
+                            defeat: "Great",
+                        }
+                    })
                 }
             }
 
@@ -131,6 +140,15 @@ $(document).ready(function(){
         $("#packageMessage").append(downloadNum + " comments packaged<br>");
         $("#packageMessage").append("zip downloading...<br>");
         document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
+        swal({
+            title: "Comments downloaded!",
+            text: "How is your experience?",
+            icon: "success",
+            buttons: {
+                cancel: "Not Good",
+                defeat: "Great",
+            }
+        })
     }
 
 
@@ -148,21 +166,32 @@ $(document).ready(function(){
         if(document.getElementById(i)){
             loadimage(document.getElementById(i),i);
             downloadNum++;
+            // package message
+            $("#packageMessage").append("Comment "+ i +" rendering...<br>");
+            document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
         }
         else{
             if(i < (id-1)){
                 i++;
                 next(i);
-            }else if(zipCheck){
+            }else if(zipCheck && (downloadNum>0)){
                 zipDownload();
+            }else if(downloadNum == 0){
+                // package message
+                $("#packageMessage").append("No comments found!<br>");
+                $("#packageMessage").removeClass("alert-success");
+                $("#packageMessage").addClass("alert-danger");
+                $("#loadProcess").removeClass("bg-success");
+                $("#loadProcess").addClass("bg-danger");
+                document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
+                swal ( "Oops" ,  "No comments found!" ,  "error" );
+
             }
         }
         // debug message
         // console.log("Comment "+ i +" start rendering");
 
-        // package message
-        $("#packageMessage").append("Comment "+ i +" rendering...<br>");
-        document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
+
 
         // process bar
         process(i);
@@ -244,9 +273,7 @@ $(document).ready(function(){
         var i = 0; // number of data
 
         // debug message
-        console.log(data);
-
-
+        //console.log(data);
 
         // append comments
         for(i = 0; i < data.items.length; i++){
@@ -315,7 +342,7 @@ $(document).ready(function(){
             // append comment
             appendComment(data,commentNum);
         }).fail(function(){
-            alert("There is something wrong");
+            swal ( "Oops" ,  "Something went wrong!" ,  "error" );
         });
 
     }
@@ -392,6 +419,22 @@ $(document).ready(function(){
 
     }
 
+    // up
+    $(window).scroll(function() {
+        var scrollY = $(document).scrollTop();
+
+        if (scrollY > 550){ //如果滚动距离大于550px则隐藏，否则删除隐藏类
+            $('#up').fadeIn("slow");
+        }
+        else {
+            $('#up').fadeOut("slow");
+        }
+    })
+
+    $("#up").click(function(){
+        $("html,body").animate({scrollTop:0},1000);
+    })
+
     // Step 1: check & load comments
     $("#load").on('input propertychange', () => {
         var videoIdTemp = $("#videoId").val();
@@ -442,11 +485,17 @@ $(document).ready(function(){
 
         // load comment
         loadComment(commentNum);
+        $("#result").addClass("pt-4");
 
         $("#step1").removeClass("show active");
         $("#step2").addClass("show active");
         $("#step1Control").removeClass("active");
         $("#step2Control").addClass("active");
+
+        setTimeout(function(){
+            $("html,body").animate({scrollTop:$("#result").offset().top},1000);
+        },1000);
+
 
     })
 
@@ -457,6 +506,7 @@ $(document).ready(function(){
 
 
     })
+
     $("#loadMoreComment20").click(function(){
         var commentNum = 20;
         loadComment(commentNum);
@@ -506,7 +556,6 @@ $(document).ready(function(){
     $("#downloadBtn").click(function(event){
 
         event.preventDefault();
-
 
         // debug message
         console.log("Download as zip: " + zipCheck);

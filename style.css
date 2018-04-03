@@ -275,3 +275,34 @@ a.nav-step.active {
 .container .row .w-50{
     min-width: 350px;
 }
+
+.up{
+    width: 35px;
+    height: 35px;
+    display: block;
+    position: fixed;
+    z-index: 555;
+    bottom: 40px;
+    right: 30px;
+    border-radius: 15px;
+    background-color: rgba(250, 250, 250, 0);
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    color: #FFFFFF;
+    cursor: pointer;
+    padding: 0px;
+    white-space: nowrap;
+    overflow: hidden;
+
+
+}
+
+.up-img{
+    position: relative;
+    align-items: center;
+
+
+}
+.up-img img{
+    width: 100%;
+}
+
