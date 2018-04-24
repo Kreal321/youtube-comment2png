@@ -4,37 +4,37 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <meta name="author" content="Kezhen Xu">
+    <meta name="author" content="Creative KZ">
     <title>Download Youtube Comment as PNG</title>
 
-    <!-- bookstrap 4.5 -->
+    <!-- bootstrap 4.5 -->
     <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/css/bootstrap.min.css"
-          integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
+        integrity="sha384-9aIt2nRpC12Uk9gS9baDl411NQApFmC26EwAOH8WgZl5MYYxFfc+NcPb1dKGj7Sk" crossorigin="anonymous">
     <script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"
-            integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
-            crossorigin="anonymous"></script>
+        integrity="sha384-DfXdz2htPH0lsSSs5nCTpuj/zy4C+OGpamoFVy38MVBnE+IbbVYUew+OrCXaRkfj"
+        crossorigin="anonymous"></script>
     <script src="https://cdn.jsdelivr.net/npm/popper.js@1.16.0/dist/umd/popper.min.js"
-            integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
-            crossorigin="anonymous"></script>
+        integrity="sha384-Q6E9RHvbIyZFJoft+2mJbHaEWldlvI9IOYy5n3zV9zzTtmI3UksdQRVvoxMfooAo"
+        crossorigin="anonymous"></script>
     <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.0/js/bootstrap.min.js"
-            integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
-            crossorigin="anonymous"></script>
+        integrity="sha384-OgVRvuATP1z7JjHLkuOU7Xw704+h835Lr+6QL9UvYjZE3Ipu6Tp75j7Bh/kR0JKI"
+        crossorigin="anonymous"></script>
     <!-- jquery 3.5 -->
     <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.5.1/jquery.min.js"></script>
     <!-- html2canvas 0.5.0 beta 4 -->
-    <script src="html2canvas.min.js"></script>
+    <script src="js/html2canvas.min.js"></script>
     <!-- JS Zip 3.3-->
-    <script src="jszip.min.js"></script>
-    <script src="jszip-utils.min.js"></script>
+    <script src="js/jszip.min.js"></script>
+    <script src="js/jszip-utils.min.js"></script>
     <!-- FileSaver 2.02-->
-    <script src="FileSaver.min.js"></script>
+    <script src="js/FileSaver.min.js"></script>
     <!-- Sweet Alert -->
     <script src="https://unpkg.com/sweetalert/dist/sweetalert.min.js"></script>
     <!-- Fonts -->
     <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@100;300;400;500&display=swap" rel="stylesheet">
 
-    <link rel="stylesheet" href="style.css">
-    <script src="maintest.js"></script>
+    <link rel="stylesheet" href="css/style.css">
+    <script src="js/main.js"></script>
     <script>
         function removeComment(comment) {
             document.getElementById(comment).remove();
@@ -44,192 +44,197 @@
 
 <body>
 
-<div class="image-container" style="background-image: url(wizard.jpg);height: auto;">
+    <div class="image-container" style="background-image: url(img/background.png);height: auto;">
 
-    <a href="">
-        <div class="logo-container">
-            <div class="logo">
-                <img src="KZ.png">
+        <a href="https://www.creativekz.com/">
+            <div class="logo-container">
+                <div class="logo">
+                    <img src="img/KZ.png">
+                </div>
+                <div class="brand">Creative KZ</div>
             </div>
-            <div class="brand">Creative KZ</div>
-        </div>
 
-    </a>
+        </a>
 
-    <a class="up" id="up" style="display: none;">
-        <div class="up-img">
-            <img src="up.png">
-        </div>
+        <a class="up" id="up" style="display: none;">
+            <div class="up-img">
+                <img src="img/up.png">
+            </div>
+            
+        </a>
 
-    </a>
+        <div class="container">
 
-    <div class="container">
+            <div class="row">
+                <div class="col-sm-8" style="min-width: 449px;">
+                    <div class="step-container">
+                        <div class="step-form">
 
-        <div class="row">
-            <div class="col-sm-8" style="min-width: 449px;">
-                <div class="step-container">
-                    <div class="step-form">
+                            <h3 class="header-title"><b>DOWNLOAD</b> Youtube Comment<br><small>As png to make awesome videos</small>
+                            </h3>
 
-                        <h3 class="header-title"><b>DOWNLOAD</b> Youtube Comment<br><small>As png to make awesome videos</small>
-                        </h3>
-
-                        <ul class="nav nav-pills mb-3 step-bar" id="pills-tab" role="tablist">
-                            <li class="nav-item" style="width: 33.33%">
-                                <a class="nav-step active"  id="step1Control">Load</a>
-                            </li>
-                            <li class="nav-item" style="width: 33.33%">
-                                <a class="nav-step"  id="step2Control">Choose</a>
-                            </li>
-                            <li class="nav-item" style="width: 33.33%">
-                                <a class="nav-step"  id="step3Control">Download</a>
-                            </li>
-                        </ul>
+                            <ul class="nav nav-pills mb-3 step-bar" id="pills-tab" role="tablist">
+                                <li class="nav-item" style="width: 33.33%">
+                                    <a class="nav-step active"  id="step1Control">Load</a>
+                                </li>
+                                <li class="nav-item" style="width: 33.33%">
+                                    <a class="nav-step"  id="step2Control">Choose</a>
+                                </li>
+                                <li class="nav-item" style="width: 33.33%">
+                                    <a class="nav-step"  id="step3Control">Download</a>
+                                </li>
+                            </ul>
 
 
-                        <div class="tab-content">
+                            <div class="tab-content">
 
-                            <!-- Step 1: load comment -->
-                            <div class="tab-pane fade show active" id="step1">
+                                <!-- Step 1: load comment -->
+                                <div class="tab-pane fade show active" id="step1">
 
-                                <div class="container ">
+                                    <div class="container ">
 
-                                    <form id="load">
-                                        <div class="container form-group">
-                                            <div class="row">
-                                                <div class="container w-50 float-left">
-                                                    <label>Video Id</label>
-                                                    <input class="form-control" type="text" id="videoId"
-                                                           placeholder="videoId"></input>
-                                                    <div class="invalid-feedback" id="videoIdFeedback">
-                                                        The length of video id should be 11.
+                                        <form id="load">
+                                            <div class="container form-group">
+                                                <div class="row">
+                                                    <div class="container w-50 float-left">
+                                                        <label>Video Id</label>
+                                                        <input class="form-control" type="text" id="videoId"
+                                                            placeholder="videoId"></input>
+                                                        <div class="invalid-feedback" id="videoIdFeedback">
+                                                            The length of video id should be 11.
+                                                        </div>
+
+                                                        <label id="commentNumLabel">Load 100 comments</label>
+                                                        <input type="range" class="custom-range" min="1" max="100" id="commentNum" value="10">
+
+                                                        <label>Sort by</label>
+                                                        <select class="form-control" id="order">
+                                                            <option>time</option>
+                                                            <option>relevance</option>
+                                                        </select>
+
+                                                        <div class="custom-switch row mt-4">
+                                                            <input type="checkbox" class="custom-control-input" id="apiCheck" checked>
+                                                            <label class="custom-control-label" for="apiCheck">Use Public Youtube Api Key</label>
+                                                        </div>
+                                                        
+                                                        <div id="api" style="display: none">
+                                                            <input class="form-control" type="text" id="apiKey" placeholder="Your Api key"></input>
+                                                        </div>
+
                                                     </div>
-
-                                                    <label id="commentNumLabel">Load 100 comments</label>
-                                                    <input type="range" class="custom-range" min="1" max="100" id="commentNum" value="10">
-
-                                                    <label>Sort by</label>
-                                                    <select class="form-control" id="order">
-                                                        <option>time</option>
-                                                        <option>relevance</option>
-                                                    </select>
-
-                                                    <div class="custom-switch row mt-4">
-                                                        <input type="checkbox" class="custom-control-input" id="apiCheck" checked>
-                                                        <label class="custom-control-label" for="apiCheck">Use Public Youtube Api Key</label>
+                                                    <div class="container w-50 float-right" id="videoInfo">
+                                                        <label id="howTo">How to use?</label>
+                                                        <div class="videoPlayer" style="padding-top: 0.4rem;">
+                                                            <iframe id="ytplayer" type="text/html" width="320" height="180"
+                                                            src="https://www.youtube.com/embed/M7lc1UVf-VE?controls=0&fs=0"
+                                                            frameborder="0" allowfullscreen></iframe>
+                                                        </div>
+                                                        <div class="idHelper">
+                                                            <label>Where is the video id?</label>
+                                                            <img src="img/idhelp.gif">
+                                                            
+                                                        </div>
                                                     </div>
-
-                                                    <div id="api" style="display: none">
-                                                        <input class="form-control" type="text" id="apiKey" placeholder="Your Api key"></input>
-                                                    </div>
-
+                                                    
                                                 </div>
-                                                <div class="container w-50 float-right" id="videoInfo">
-                                                    <label id="howTo">How to use?</label>
-                                                    <div class="videoPlayer" style="padding-top: 0.4rem;">
-                                                        <iframe id="ytplayer" type="text/html" width="320" height="180"
-                                                                src="https://www.youtube.com/embed/M7lc1UVf-VE?controls=0&fs=0"
-                                                                frameborder="0" allowfullscreen></iframe>
-                                                    </div>
-                                                    <div class="idHelper">
-                                                        <label>Where is the video id?</label>
-                                                        <img src="idhelp.gif">
 
-                                                    </div>
+                                                <div class="d-flex justify-content-center pt-4">
+                                                    <button class="btn btn-danger" type="submit" id="loadSubmit" disabled>Load Comment</button>
                                                 </div>
-
+                                                
                                             </div>
 
-                                            <div class="d-flex justify-content-center pt-4">
-                                                <button class="btn btn-danger" type="submit" id="loadSubmit" disabled>Load Comment</button>
-                                            </div>
 
-                                        </div>
-
-
-                                    </form>
-
-                                </div>
-
-                            </div>
-
-                            <!-- Step 2: Choose comment  -->
-                            <div class="tab-pane fade" id="step2">
-
-                                <div class="container">
-                                    <div class="container w-75 align-content-centers pt-3 mb-3">
-
-                                        <div class="alert alert-success" role="alert" id="loadMessage">
-                                            Comments loading...
-                                        </div>
-
-                                        <label class="pr-3">Load more comments:</label>
-                                        <div class="d-lg-inline">
-                                            <button class="btn btn-danger loadMoreComment" id="loadMoreComment10">10+</button>
-                                            <button class="btn btn-danger loadMoreComment" id="loadMoreComment20">20+</button>
-                                            <button class="btn btn-danger loadMoreComment" id="loadMoreComment50">50+</button>
-                                        </div>
-                                        <form id="commentSize" class="pt-2">
-                                            <div class="form-group">
-                                                <label id="borderRadius">Border Radius: 10px</label>
-                                                <input type="range" class="custom-range" min="0" max="50"
-                                                       id="radiusValue" value="10">
-                                            </div>
                                         </form>
-                                        <div class="d-flex justify-content-end pt-4">
-                                            <button class="btn btn-danger" id="step2next">Next</button>
+
+                                    </div>
+
+                                </div>
+
+                                <!-- Step 2: Choose comment  -->
+                                <div class="tab-pane fade" id="step2">
+
+                                    <div class="container">
+                                        <div class="container w-75 align-content-centers pt-3 mb-3">
+                                        
+                                            <div class="alert alert-success" role="alert" id="loadMessage">
+                                                Comments loading...
+                                            </div>
+                                    
+                                            <label class="pr-3">Load more comments:</label>
+                                            <div class="d-lg-inline">
+                                                <button class="btn btn-danger loadMoreComment" id="loadMoreComment10">10+</button>
+                                                <button class="btn btn-danger loadMoreComment" id="loadMoreComment20">20+</button>
+                                                <button class="btn btn-danger loadMoreComment" id="loadMoreComment50">50+</button>
+                                            </div>
+                                            <form id="commentSize" class="pt-2">
+                                                <div class="form-group">
+                                                    <label id="borderRadius">Border Radius: 10px</label>
+                                                    <input type="range" class="custom-range" min="0" max="50"
+                                                        id="radiusValue" value="10">
+                                                </div>
+                                            </form>
+                                            <div class="d-flex justify-content-end pt-4">
+                                                <button class="btn btn-danger" id="step2next">Next</button>
+                                            </div>
                                         </div>
                                     </div>
                                 </div>
-                            </div>
 
-                            <!-- Step 3: comment download -->
-                            <div class="tab-pane fade" id="step3">
-                                <div class="container">
-                                    <div class="container w-75 pt-3 mb-3">
-                                        <div class="alert alert-success"  id="packageMessage" style="height: 74px; overflow:hidden;">
-                                            Everything seems fine.<br>You can start downloading.<br>
-                                        </div>
-                                        <div class="progress" style="height: 20px">
-                                            <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
-                                                 id="loadProcess" role="progressbar" style="width: 0%">0%</div>
-                                        </div>
-
-                                        <div class="custom-control custom-checkbox">
-                                            <input type="checkbox" class="custom-control-input" id="zipCheck" checked>
-                                            <label class="custom-control-label" for="zipCheck">Package PNGs as zip</label>
-                                        </div>
-
-                                        <div class="d-inline-flex justify-content-between w-100">
-                                            <div class="justify-content-start pt-4">
-                                                <button class="btn btn-danger" id="previous">Previous</button>
+                                <!-- Step 3: comment download -->
+                                <div class="tab-pane fade" id="step3">
+                                    <div class="container">
+                                        <div class="container w-75 pt-3 mb-3">
+                                            <div class="alert alert-success"  id="packageMessage" style="height: 74px; overflow:hidden;">
+                                                Everything seems fine.<br>You can start downloading.<br>
                                             </div>
-                                            <div class="justify-content-end pt-4">
-                                                <button type="submit" class="btn btn-danger" id="downloadBtn">Download</button>
+                                            <div class="progress" style="height: 20px">
+                                                <div class="progress-bar progress-bar-striped progress-bar-animated bg-success"
+                                                    id="loadProcess" role="progressbar" style="width: 0%">0%</div>
                                             </div>
+                                            
+                                                <div class="custom-control custom-checkbox">
+                                                    <input type="checkbox" class="custom-control-input" id="zipCheck" checked>
+                                                    <label class="custom-control-label" for="zipCheck">Package PNGs as zip</label>
+                                                </div>
+                                            
+                                                <div class="d-inline-flex justify-content-between w-100">
+                                                <div class="justify-content-start pt-4">
+                                                    <button class="btn btn-danger" id="previous">Previous</button>
+                                                </div>
+                                                <div class="justify-content-end pt-4">
+                                                    <button type="submit" class="btn btn-danger" id="downloadBtn">Download</button>
+                                                </div>
+                                            </div>
+                                            
                                         </div>
-
                                     </div>
                                 </div>
-                            </div>
 
+                            </div>
                         </div>
                     </div>
                 </div>
             </div>
+
+            <div class="container footer">
+                <p class="mb-0 text-center">&copy;2020 Creative KZ. All rights reserved.<br>
+                    Youtube Comment to PNG Beta 1.1 <a href="">Document</a>. <a href="License.md">License</a>. <a href="https://github.com/creative-kz/youtube-comment-to-png">Github</a>.</p>
+
+            </div>
         </div>
 
-    </div>
-
-
-</div>
-
-<!-- Load Comment -->
-<div class="container">
-    <div class="comment-block" id="result">
-
 
     </div>
-</div>
+
+    <!-- Load Comment -->
+    <div class="container">
+        <div class="comment-block" id="result">
+
+
+        </div>
+    </div>
 </body>
 
 </html>

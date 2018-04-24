@@ -281,7 +281,7 @@ $(document).ready(function(){
             result = `
 
                 <div class="comment position-relative" style="border-radius: 10px" id="${id}">
-                    <a class="delete" onclick="removeComment(${id})" data-html2canvas-ignore ><img src="close.png" class="delete-img" /></a>     
+                    <a class="delete" onclick="removeComment(${id})" data-html2canvas-ignore ><img src="img/close.png" class="delete-img" /></a>     
                     <img src="${data.items[i].snippet.topLevelComment.snippet.authorProfileImageUrl}" class="img">
                     <div class="comment-text">
                         <div class="comment-header">
@@ -451,7 +451,7 @@ $(document).ready(function(){
                 </div>
                 <div class="idHelper">
                     <label>Where is the video id?</label>
-                    <img src="idhelp.gif">
+                    <img src="img/idhelp.gif">
                     
                 </div>
             `
@@ -492,7 +492,7 @@ $(document).ready(function(){
         
         // load comment
         loadComment(commentNum);
-        $("#result").addClass("pt-4");
+        $("#result").addClass("pt-4 pb-4");
         
         $("#step1").removeClass("show active");
         $("#step2").addClass("show active");
