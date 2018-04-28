@@ -8,7 +8,7 @@ $(document).ready(function(){
     var videoId =""; // videoId
     var videoTitle =""; // video title
     var order ="" // comment order
-    var key = "AIzaSyBg4vDgPr6uFZqwg2L6BvVovASTQGm7Nh4"; // youtube api key
+    var key = "AIzaSyB6JtDJi6j6zudZqdnN4zzL5Ossp2qIA20"; // youtube api key
 
 
     // load comment canvas 
@@ -435,7 +435,7 @@ $(document).ready(function(){
         var commentNum = $("#commentNum").val();
 
 
-        if(videoIdTemp.length != 11){
+        if(videoIdTemp.length < 11){
             $("#videoId").removeClass("is-valid");
             $("#videoId").addClass("is-invalid");
             $("#videoIdFeedback").removeClass("valid-feedback");
