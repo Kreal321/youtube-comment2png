@@ -8,7 +8,7 @@ $(document).ready(function(){
     var videoId =""; // videoId
     var videoTitle =""; // video title
     var order ="" // comment order
-    var key = "AIzaSyB6JtDJi6j6zudZqdnN4zzL5Ossp2qIA20"; // youtube api key
+    var key = "AIzaSyBLTMgE7scOR1Ytl9w0LDK1CiSH9n0FCcc"; // youtube api key
 
 
     // load comment canvas 
@@ -267,8 +267,12 @@ $(document).ready(function(){
         
     }
 
+    function sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
     // append comments
-    function appendComment(data,commentNum){
+    async function appendComment(data, commentNum) {
         var result = "";
         var i = 0; // number of data
 
@@ -276,7 +280,7 @@ $(document).ready(function(){
         //console.log(data);
 
         // append comments
-        for(i = 0; i < data.items.length; i++){
+        for (i = 0; i < data.items.length; i++) {
             var dataTime = timeChange(data.items[i].snippet.topLevelComment.snippet.publishedAt);
             result = `
 
@@ -296,24 +300,25 @@ $(document).ready(function(){
 
             $("#result").append(result);
             id++;
+            await sleep(100);
         }
         // renew pageToken
         pageToken = data.nextPageToken;
         // debug message
         //console.log("pageToken: " + pageToken);
         console.log(i + " comments loaded.");
-        
-        if(i == data.items.length){
+
+        if (i == data.items.length) {
             // number of comments left
             commentNum = commentNum - 100;
             // load left comments
-            if(commentNum > 0 && pageToken != null){
+            if (commentNum > 0 && pageToken != null) {
                 loadComment(commentNum);
-            }else if(commentNum <= 0 && pageToken != null){
-                $("#loadMessage").text((id-1) +" comments have been loaded.");
-            }else if(pageToken == null){
-                $("#loadMessage").html((id-1) +" comments have been loaded.<br>All top-level comments loaded.<br>Reply is temporarily not supported");
-                $(".loadMoreComment").attr("disabled",true);
+            } else if (commentNum <= 0 && pageToken != null) {
+                $("#loadMessage").text((id - 1) + " comments have been loaded.");
+            } else if (pageToken == null) {
+                $("#loadMessage").html((id - 1) + " comments have been loaded.<br>All top-level comments loaded.<br>Reply is temporarily not supported");
+                $(".loadMoreComment").attr("disabled", true);
             }
         }
     }

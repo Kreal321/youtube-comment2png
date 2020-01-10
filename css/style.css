@@ -51,7 +51,6 @@ body {
 }
 
 .comment-detail {
-  color: var(--yt-spec-text-primary);
   font-size: 14px;
   line-height: 20px;
 }
@@ -162,7 +161,7 @@ a.nav-step.active {
   font-family: Roboto, Arial, sans-serif;
   margin-right: -15px;
   margin-left: -15px;
-  justify-content: center!;
+  justify-content: center;
 }
 
 .videoInfo img {
