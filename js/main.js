@@ -1,5 +1,5 @@
 $(document).ready(function(){
-    
+
     var id = 1; // image id
     var zip = new JSZip(); // zip package
     var zipCheck = true; // zip package download
@@ -13,38 +13,38 @@ $(document).ready(function(){
 
     // load comment canvas 
     function loadimage(element,i) {
-		var width = element.offsetWidth; //dom width
-		var height = element.offsetHeight; //dom height
-        
+        var width = element.offsetWidth; //dom width
+        var height = element.offsetHeight; //dom height
+
         // fix blurred picture
-		var scale = window.devicePixelRatio * 2; // 2x device pixel
+        var scale = window.devicePixelRatio * 2; // 2x device pixel
         var canvas = document.createElement('canvas'); // create canvas
-		canvas.width = width * scale;
-		canvas.height = height * scale;
-		canvas.style.width = width + 'px';
-		canvas.style.height = height + 'px';
+        canvas.width = width * scale;
+        canvas.height = height * scale;
+        canvas.style.width = width + 'px';
+        canvas.style.height = height + 'px';
 
         // fix picture offset
         //设置context位置，值为相对于视窗的偏移量负值，让图片复位(解决偏移的重点)
         var rect = element.getBoundingClientRect(); // get object position relative to the viewport
-                
-        canvas.getContext("2d").scale(scale, scale); 
+
+        canvas.getContext("2d").scale(scale, scale);
         canvas.getContext("2d").translate(-rect.left-8, -rect.top);
- 
-		var opts = {
-			canvas: canvas,
-			useCORS: true, // Open cross domain
+
+        var opts = {
+            canvas: canvas,
+            useCORS: true, // Open cross domain
             scrollY: 0, // Y offset = 0  Avoid deviation caused by rolling
         };
-        
+
         // get png
-		html2canvas(element, opts).then(function(canvas) {
+        html2canvas(element, opts).then(function(canvas) {
             // append image to body (debug)
             // document.body.appendChild(canvas);
-            
+
             // png file name
             var name = $("#C"+i).text();
-            
+
             // zip download
             if(zipCheck){
                 package(canvas.toDataURL(), name, i);
@@ -80,29 +80,29 @@ $(document).ready(function(){
 
         },1000);
     }
-    
+
     // single download (not use)
     function saveAss(uri, filename) {
-        
+
         var link = document.createElement('a');
         if (typeof link.download === 'string') {
-          link.href = uri;
-          link.download = filename;
-          
-          //Firefox requires the link to be in the body
-          document.body.appendChild(link);
-    
-          //simulate click
-          link.click();
-    
-          //remove the link when done
-          document.body.removeChild(link);
+            link.href = uri;
+            link.download = filename;
+
+            //Firefox requires the link to be in the body
+            document.body.appendChild(link);
+
+            //simulate click
+            link.click();
+
+            //remove the link when done
+            document.body.removeChild(link);
         } else {
-          window.open(uri);
+            window.open(uri);
         }
-      }
-    
-    
+    }
+
+
     // JS zip 
     function package(url,filename,i){
         // package png file
@@ -114,7 +114,7 @@ $(document).ready(function(){
         // pacakage message
         $("#packageMessage").append("Comment " + i + " packaging...<br>");
         document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
-        
+
         // rendering next comment
         if(i < (id - 1)){
             i++;
@@ -124,12 +124,12 @@ $(document).ready(function(){
         else{
             zipDownload();
         }
- 
+
     }
 
     // zip download
     function zipDownload(){
-        zip.generateAsync({type:"blob"}).then(function(content) {        
+        zip.generateAsync({type:"blob"}).then(function(content) {
             saveAs(content, videoTitle +" Comments.zip");
         });
         // debug message
@@ -184,24 +184,24 @@ $(document).ready(function(){
                 $("#loadProcess").removeClass("bg-success");
                 $("#loadProcess").addClass("bg-danger");
                 document.getElementById('packageMessage').scrollTop = document.getElementById('packageMessage').scrollHeight;
-                swal ( "Oops" ,  "No comments found!" ,  "error" ); 
-                
+                swal ( "Oops" ,  "No comments found!" ,  "error" );
+
             }
         }
         // debug message
         // console.log("Comment "+ i +" start rendering");
 
-        
+
 
         // process bar
         process(i);
-        
+
     }
 
     // time change
     function timeChange(cTime){
         // change date format
-        var cDate = cTime.substring(0,19);        
+        var cDate = cTime.substring(0,19);
         cDate = cDate.replace(/-/g, "/");
         cDate = cDate.replace("T", " ");
         // get time difference
@@ -264,7 +264,7 @@ $(document).ready(function(){
             return Math.floor(dateDiff / 1e3) + " second ago"; // 1 second ago
             console.log(time + " seconds ago");
         }
-        
+
     }
 
     function sleep(ms) {
@@ -326,29 +326,29 @@ $(document).ready(function(){
 
     // load comments connect to google api
     function loadComment(commentNum){
-            
-            // get number of comments to take, max 100
-            var number = 0;
-            if(commentNum > 100){
-                number = 100;
-            }else{
-                number = commentNum;
-            }
-            // connect to Youtube API
-            if(pageToken.length == 0){
-                var url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=" + videoId + "&maxResults=" + number + "&order=" + order + "&key=" + key;
-            }else{
-                var url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=" + videoId + "&maxResults=" + number + "&order=" + order + "&pageToken=" + pageToken + "&key=" + key;
 
-            }
-            // connect to google api
-            
-            $.get(url,function(data){
-                // append comment
-                appendComment(data,commentNum);
-            }).fail(function(){
-                swal ( "Oops" ,  "Something went wrong!" ,  "error" );
-            });
+        // get number of comments to take, max 100
+        var number = 0;
+        if(commentNum > 100){
+            number = 100;
+        }else{
+            number = commentNum;
+        }
+        // connect to Youtube API
+        if(pageToken.length == 0){
+            var url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=" + videoId + "&maxResults=" + number + "&order=" + order + "&key=" + key;
+        }else{
+            var url = "https://www.googleapis.com/youtube/v3/commentThreads?part=snippet&videoId=" + videoId + "&maxResults=" + number + "&order=" + order + "&pageToken=" + pageToken + "&key=" + key;
+
+        }
+        // connect to google api
+
+        $.get(url,function(data){
+            // append comment
+            appendComment(data,commentNum);
+        }).fail(function(){
+            swal ( "Oops" ,  "Something went wrong!" ,  "error" );
+        });
 
     }
 
@@ -400,9 +400,9 @@ $(document).ready(function(){
 
                 `;
                 $("#videoInfo").html(info);
-                
+
                 $("#videoId").removeClass("is-invalid");
-                $("#videoId").addClass("is-valid");  
+                $("#videoId").addClass("is-valid");
                 $("#videoIdFeedback").removeClass("invalid-feedback");
                 $("#videoIdFeedback").addClass("valid-feedback");
                 $("#videoIdFeedback").text("video id is valid.");
@@ -411,8 +411,8 @@ $(document).ready(function(){
             else{
                 $("#videoIdFeedback").text("The video id you entered does not exist.");
                 $("#loadSubmit").attr("disabled",true);
-                
-            }   
+
+            }
         })
 
     }
@@ -420,10 +420,10 @@ $(document).ready(function(){
     // up
     $(window).scroll(function() {
         var scrollY = $(document).scrollTop();
- 
+
         if (scrollY > 550){ //如果滚动距离大于550px则隐藏，否则删除隐藏类
             $('#up').fadeIn("slow");
-        } 
+        }
         else {
             $('#up').fadeOut("slow");
         }
@@ -433,7 +433,7 @@ $(document).ready(function(){
         $("html,body").animate({scrollTop:0},1000);
     })
 
-    // Step 1: check & load comments 
+    // Step 1: check & load comments
     $("#load").on('input propertychange', () => {
         var videoIdTemp = $("#videoId").val();
         var apiCheck = $("#apiCheck").is(":checked");
@@ -464,11 +464,11 @@ $(document).ready(function(){
                 $("#videoInfo").html(helper);
             }
         }else{
-            videoInfo(videoIdTemp);    
+            videoInfo(videoIdTemp);
         }
 
         $("#commentNumLabel").text("Load " + commentNum*10 + " comments");
-       
+
         if(!apiCheck){
             $("#api").show();
             $(".custom-switch").removeClass("mt-4");
@@ -476,11 +476,11 @@ $(document).ready(function(){
             $("#api").hide();
             $(".custom-switch").addClass("mt-4");
         }
-    
+
     })
 
     $("#load").submit(function(event){
-        
+
         event.preventDefault();
 
         videoId = $("#videoId").val();
@@ -494,40 +494,40 @@ $(document).ready(function(){
             // debug message
             //console.log(key);
         }
-        
+
         // load comment
         loadComment(commentNum);
         $("#result").addClass("pt-4 pb-4");
-        
+
         $("#step1").removeClass("show active");
         $("#step2").addClass("show active");
         $("#step1Control").removeClass("active");
         $("#step2Control").addClass("active");
-        
-        setTimeout(function(){   
+
+        setTimeout(function(){
             $("html,body").animate({scrollTop:$("#result").offset().top},1000);
         },1000);
-        
-        
+
+
     })
 
     // Step2: comment style
     $("#loadMoreComment10").click(function(){
         var commentNum = 10;
         loadComment(commentNum);
-        
+
 
     })
 
     $("#loadMoreComment20").click(function(){
         var commentNum = 20;
         loadComment(commentNum);
-       
+
     })
     $("#loadMoreComment50").click(function(){
         var commentNum = 50;
         loadComment(commentNum);
-        
+
     })
 
     $("#commentSize").on('input propertychange', () => {
@@ -566,18 +566,18 @@ $(document).ready(function(){
     })
 
     $("#downloadBtn").click(function(event){
-        
+
         event.preventDefault();
 
         // debug message
         console.log("Download as zip: " + zipCheck);
-        
+
         var i = 1;
-        
+
         next(i);
 
-        
-    
+
+
     })
 
 

@@ -1,0 +1,18 @@
+<?xml version="1.0" encoding="utf-8"?>
+<svg viewBox="130.7935 88.2128 79.64 57.75" xmlns="http://www.w3.org/2000/svg">
+  <defs>
+    <linearGradient x1="0" y1="1" x2="0" y2="0" id="93bd626b-1f5b-45ac-ba53-ef715fd0af4d">
+      <stop offset="0" stop-color="#ffecd2"/>
+      <stop offset="1" stop-color="#fcb69f"/>
+    </linearGradient>
+  </defs>
+  <g transform="matrix(1, 0, 0, 1, 130.79349398612976, 88.2128335237503)">
+    <g class="tp-name" fill="url(#93bd626b-1f5b-45ac-ba53-ef715fd0af4d)">
+      <g transform="scale(1)">
+        <g>
+          <path d="M4.13 0L14.4 0 14.4-56.25 4.13-56.25ZM14.4-28.05C31.95-6.22 48.75 1.5 63.9 1.5 71.92 1.5 78.75 0.38 83.77-3.15L78.83-11.47C74.47-8.92 70.27-7.95 63.9-7.95 52.5-7.95 42.6-11.85 27.15-28.05L48.52-56.25 36.38-56.25ZM50.32-17.4L80.4-17.4 80.4-26.85 66.08-26.85 81.75-56.25 51.15-56.25 51.15-46.8 66.08-46.8Z" transform="translate(-4.130000114440918, 56.25)"/>
+        </g>
+      </g>
+    </g>
+  </g>
+</svg>
